@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Student Portal - Login</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 1rem;
         }
 
         .login-container {
             background: white;
             padding: 2rem;
             border-radius: 10px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 400px;
         }
@@ -41,7 +42,6 @@
 
         .login-header p {
             color: #666;
-            font-size: 0.9rem;
         }
 
         .form-group {
@@ -55,8 +55,7 @@
             font-weight: 500;
         }
 
-        input[type="text"],
-        input[type="password"] {
+        input[type="text"], input[type="password"] {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #e1e1e1;
@@ -65,18 +64,17 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus {
+        input[type="text"]:focus, input[type="password"]:focus {
             outline: none;
             border-color: #667eea;
         }
 
         .login-btn {
             width: 100%;
-            padding: 0.75rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
+            padding: 0.75rem;
             border-radius: 5px;
             font-size: 1rem;
             font-weight: 600;
@@ -95,11 +93,10 @@
         }
 
         .message {
-            margin-top: 1rem;
             padding: 0.75rem;
             border-radius: 5px;
+            margin-bottom: 1rem;
             text-align: center;
-            font-weight: 500;
         }
 
         .success {
@@ -114,60 +111,82 @@
             border: 1px solid #f5c6cb;
         }
 
-        .dashboard {
-            display: none;
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .stats {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 5px;
             text-align: center;
         }
 
-        .dashboard h2 {
+        .stats h3 {
             color: #333;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .dashboard p {
+        .stats p {
             color: #666;
-            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
         }
 
-        .dashboard-content {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-        }
-
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .stat-card {
-            background: white;
+        .demo-credentials {
+            margin-top: 1rem;
             padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 0.9rem;
         }
 
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
+        .demo-credentials h4 {
+            color: #495057;
+            margin-bottom: 0.5rem;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 0.25rem;
+        .demo-credentials p {
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Test Portal Styles */
+        .test-portal {
+            display: none;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header h1 {
+            color: #333;
         }
 
         .user-info {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .logout-btn {
@@ -178,374 +197,571 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: 500;
-            margin-top: 1rem;
         }
 
         .logout-btn:hover {
             background: #c82333;
         }
 
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .add-user-section {
-            margin-top: 2rem;
-            padding: 1.5rem;
+        .test-selection {
             background: #f8f9fa;
+            padding: 1.5rem;
             border-radius: 8px;
+            margin-bottom: 2rem;
         }
 
-        .add-user-section h3 {
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .test-container {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .timer {
+            background: #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .question {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .option {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background: #f0f0f0;
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: #218838;
+        }
+
+        .next-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #0069d9;
+        }
+
+        .prev-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .prev-btn:hover {
+            background: #5a6268;
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .result-score {
+            font-size: 2rem;
+            font-weight: bold;
             color: #333;
             margin-bottom: 1rem;
         }
 
-        .admin-only {
-            display: none;
-        }
-
-        .user-list {
-            margin-top: 1rem;
-        }
-
-        .user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem;
-            background: white;
-            margin: 0.5rem 0;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.8rem;
+        .result-details {
+            margin-top: 2rem;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div id="loginForm">
-            <div class="login-header">
-                <h1>Welcome Back</h1>
-                <p>Please sign in to your account</p>
-            </div>
-
-            <form id="loginFormElement">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-
-                <button type="submit" class="login-btn" id="loginBtn">
-                    <span id="loginBtnText">Sign In</span>
-                    <span id="loginBtnLoading" class="loading" style="display: none;"></span>
-                </button>
-            </form>
-
-            <div id="message"></div>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-header">
+            <h1>Student Test Portal</h1>
+            <p>Please login to access your tests</p>
         </div>
 
-        <div id="dashboard" class="dashboard">
-            <h2>Dashboard</h2>
+        <div id="messageContainer"></div>
 
-            <div class="user-info">
-                <h3 id="welcomeMessage">Welcome back!</h3>
-                <p id="userRole">User Role: Standard</p>
-                <p id="loginTime">Last Login: Just now</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
             </div>
 
-            <div class="dashboard-stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalUsers">0</div>
-                    <div class="stat-label">Total Users</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="loginCount">1</div>
-                    <div class="stat-label">Login Sessions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="uptime">Online</div>
-                    <div class="stat-label">Status</div>
-                </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
             </div>
 
-            <div class="dashboard-content">
-                <h3>Quick Actions</h3>
-                <p>Welcome to your personalized dashboard. You have successfully logged in to the system.</p>
-            </div>
+            <button type="submit" class="login-btn" id="loginBtn">Login</button>
+        </form>
 
-            <div id="adminSection" class="add-user-section admin-only">
-                <h3>User Management (Admin Only)</h3>
-                <form id="addUserForm">
-                    <div class="form-group">
-                        <label for="newUsername">New Username</label>
-                        <input type="text" id="newUsername" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <input type="password" id="newPassword" required>
-                    </div>
-                    <button type="submit" class="login-btn">Add User</button>
-                </form>
+        <div class="demo-credentials">
+            <h4>Demo Credentials:</h4>
+            <p><strong>Username:</strong> enu | <strong>Password:</strong> enu0402</p>
+            <p><strong>Username:</strong> admin | <strong>Password:</strong> admin123</p>
+        </div>
 
-                <div class="user-list">
-                    <h4>Current Users:</h4>
-                    <div id="userListContainer"></div>
+        <div class="stats">
+            <h3>Portal Statistics</h3>
+            <p>Total Users: <span id="totalUsers">0</span></p>
+            <p>Login Attempts: <span id="loginAttempts">0</span></p>
+            <p>Successful Logins: <span id="successfulLogins">0</span></p>
+        </div>
+    </div>
+
+    <!-- Test Portal -->
+    <div id="testPortal" class="test-portal">
+        <div class="container">
+            <div class="header">
+                <h1>Test Taking Portal</h1>
+                <div class="user-info">
+                    <span id="usernameDisplay">Welcome, User</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
                 </div>
             </div>
 
-            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div class="test-selection" id="testSelection">
+                <h2>Select Your Test</h2>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" onchange="updateChapters()">
+                        <option value="">-- Select Subject --</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="biology">Biology</option>
+                        <option value="mathematics">Mathematics</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="chapter">Chapter</label>
+                    <select id="chapter" disabled>
+                        <option value="">-- Select Subject First --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="questionCount">Number of Questions</label>
+                    <input type="number" id="questionCount" min="1" max="50" value="10">
+                </div>
+
+                <button class="start-btn" onclick="startTest()">Start Test</button>
+            </div>
+
+            <div id="testContainer" class="test-container">
+                <div class="timer" id="timer">Time Remaining: 00:00</div>
+
+                <div id="questionContainer">
+                    <!-- Questions will be loaded here -->
+                </div>
+
+                <div class="navigation">
+                    <button class="nav-btn prev-btn" id="prevBtn" onclick="prevQuestion()">Previous</button>
+                    <button class="nav-btn next-btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+                    <button class="nav-btn submit-btn" id="submitBtn" onclick="submitTest()">Submit Test</button>
+                </div>
+            </div>
+
+            <div id="resultContainer" class="result-container">
+                <h2>Test Results</h2>
+                <div class="result-score" id="resultScore">Score: 0/0</div>
+                <p id="resultMessage">Your test has been submitted successfully!</p>
+
+                <div class="result-details" id="resultDetails">
+                    <!-- Result details will be shown here -->
+                </div>
+
+                <button class="start-btn" onclick="resetTest()">Take Another Test</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // User credentials storage (In production, this would be on a secure server)
-        let users = [
-            { username: 'admin', password: 'admin2911', role: 'admin' },
-            { username: 'enu', password: 'enu0402', role: 'user' }
-            // Add more users here as needed
-        ];
+        // Initialize statistics from localStorage
+        let stats = JSON.parse(localStorage.getItem('portalStats')) || {
+            totalUsers: 3,
+            loginAttempts: 0,
+            successfulLogins: 0
+        };
 
-        // Session management
-        let currentUser = null;
-        let loginCount = parseInt(localStorage.getItem('loginCount') || '0');
+        // Valid user credentials
+        const validUsers = {
+            'enu': { password: 'enu0402', role: 'student', name: 'Student One' },
+            'admin': { password: 'admin123', role: 'admin', name: 'Administrator' }
+        };
 
-        // Load users from localStorage if available
-        const savedUsers = localStorage.getItem('appUsers');
-        if (savedUsers) {
-            users = JSON.parse(savedUsers);
+        // Update statistics display
+        function updateStats() {
+            document.getElementById('totalUsers').textContent = stats.totalUsers;
+            document.getElementById('loginAttempts').textContent = stats.loginAttempts;
+            document.getElementById('successfulLogins').textContent = stats.successfulLogins;
+            localStorage.setItem('portalStats', JSON.stringify(stats));
         }
 
-        // Check if user is already logged in
-        const savedSession = localStorage.getItem('currentSession');
-        if (savedSession) {
-            const session = JSON.parse(savedSession);
-            // Check if session is still valid (24 hours)
-            if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
-                currentUser = session.user;
-                showDashboard();
-            } else {
-                localStorage.removeItem('currentSession');
-            }
+        // Show message
+        function showMessage(message, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                messageContainer.innerHTML = '';
+            }, 5000);
         }
 
-        // Save users to localStorage
-        function saveUsers() {
-            localStorage.setItem('appUsers', JSON.stringify(users));
-        }
-
-        // Login form handler
-        document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('loginBtn');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginBtnLoading = document.getElementById('loginBtnLoading');
 
-            // Show loading state
+            // Update login attempts
+            stats.loginAttempts++;
+            updateStats();
+
+            // Disable login button temporarily
             loginBtn.disabled = true;
-            loginBtnText.style.display = 'none';
-            loginBtnLoading.style.display = 'inline-block';
+            loginBtn.textContent = 'Logging in...';
 
-            // Simulate network delay for better UX
+            // Simulate login delay
             setTimeout(() => {
-                const user = users.find(u => u.username === username && u.password === password);
+                if (validUsers[username] && validUsers[username].password === password) {
+                    // Successful login
+                    stats.successfulLogins++;
+                    updateStats();
 
-                if (user) {
-                    currentUser = user;
-                    loginCount++;
-                    localStorage.setItem('loginCount', loginCount.toString());
-
-                    // Save session
-                    const session = {
-                        user: user,
-                        loginTime: Date.now()
+                    // Create user session
+                    const userSession = {
+                        user: {
+                            username: username,
+                            name: validUsers[username].name,
+                            role: validUsers[username].role
+                        },
+                        loginTime: new Date().toISOString()
                     };
-                    localStorage.setItem('currentSession', JSON.stringify(session));
 
-                    showMessage('Login successful! Welcome back.', 'success');
+                    // Store session
+                    localStorage.setItem('currentSession', JSON.stringify(userSession));
 
+                    showMessage('Login successful! Redirecting to test portal...', 'success');
+
+                    // Transition to test portal
                     setTimeout(() => {
-                        showDashboard();
+                        document.getElementById('loginPage').style.display = 'none';
+                        document.getElementById('testPortal').style.display = 'block';
+                        document.getElementById('usernameDisplay').textContent = `Welcome, ${userSession.user.name}`;
                     }, 1000);
+
                 } else {
+                    // Failed login
                     showMessage('Invalid username or password. Please try again.', 'error');
                 }
 
-                // Reset button state
+                // Re-enable login button
                 loginBtn.disabled = false;
-                loginBtnText.style.display = 'inline';
-                loginBtnLoading.style.display = 'none';
-            }, 800);
+                loginBtn.textContent = 'Login';
+            }, 1000);
         });
 
-        // Add user form handler
-        document.getElementById('addUserForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const newUsername = document.getElementById('newUsername').value.trim();
-            const newPassword = document.getElementById('newPassword').value;
-
-            if (!newUsername || !newPassword) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // Check if user already exists
-            if (users.find(u => u.username === newUsername)) {
-                alert('Username already exists');
-                return;
-            }
-
-            // Add new user
-            users.push({
-                username: newUsername,
-                password: newPassword,
-                role: 'user'
-            });
-
-            saveUsers();
-            updateUserList();
-
-            // Clear form
-            document.getElementById('newUsername').value = '';
-            document.getElementById('newPassword').value = '';
-
-            alert(`User "${newUsername}" added successfully!`);
-        });
-
-        function showDashboard() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-
-            // Update user info
-            document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.username}!`;
-            document.getElementById('userRole').textContent = `User Role: ${currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)}`;
-            document.getElementById('loginTime').textContent = `Last Login: ${new Date().toLocaleString()}`;
-
-            // Update stats
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('loginCount').textContent = loginCount;
-
-            // Show admin section if user is admin
-            if (currentUser.role === 'admin') {
-                document.getElementById('adminSection').style.display = 'block';
-                updateUserList();
+        // Check if user is already logged in
+        function checkExistingSession() {
+            const currentSession = JSON.parse(localStorage.getItem('currentSession'));
+            if (currentSession && currentSession.user) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('testPortal').style.display = 'block';
+                document.getElementById('usernameDisplay').textContent = `Welcome, ${currentSession.user.name}`;
             }
         }
 
-        function updateUserList() {
-            const container = document.getElementById('userListContainer');
-            container.innerHTML = '';
+        // Initialize stats display
+        updateStats();
 
-            users.forEach((user, index) => {
-                const userItem = document.createElement('div');
-                userItem.className = 'user-item';
-                userItem.innerHTML = `
-                    <span><strong>${user.username}</strong> (${user.role})</span>
-                    ${user.username !== 'admin' ? `<button class="delete-btn" onclick="deleteUser(${index})">Delete</button>` : ''}
+        // Check for existing session on page load
+        checkExistingSession();
+
+        // Test functionality variables
+        let testQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timer;
+        let timeLeft;
+        let testStarted = false;
+
+        // Chapter data
+        const chapters = {
+            physics: ["Mechanics", "Electromagnetism", "Thermodynamics", "Optics", "Modern Physics"],
+            chemistry: ["Atomic Structure", "Chemical Bonding", "Thermodynamics", "Organic Chemistry", "Electrochemistry"],
+            biology: ["Cell Biology", "Genetics", "Ecology", "Human Physiology", "Plant Physiology"],
+            mathematics: ["Algebra", "Calculus", "Geometry", "Trigonometry", "Statistics"]
+        };
+
+        // Update chapters dropdown
+        function updateChapters() {
+            const subject = document.getElementById('subject').value;
+            const chapterSelect = document.getElementById('chapter');
+
+            if (subject) {
+                chapterSelect.innerHTML = '<option value="">-- Select Chapter --</option>';
+                chapters[subject].forEach(chapter => {
+                    chapterSelect.innerHTML += `<option value="${chapter.toLowerCase().replace(' ', '-')}">${chapter}</option>`;
+                });
+                chapterSelect.disabled = false;
+            } else {
+                chapterSelect.innerHTML = '<option value="">-- Select Subject First --</option>';
+                chapterSelect.disabled = true;
+            }
+        }
+
+        // Start test
+        function startTest() {
+            const subject = document.getElementById('subject').value;
+            const chapter = document.getElementById('chapter').value;
+            const questionCount = parseInt(document.getElementById('questionCount').value);
+
+            if (!subject || !chapter || !questionCount) {
+                alert('Please select subject, chapter and number of questions');
+                return;
+            }
+
+            loadQuestions(subject, chapter, questionCount).then(questions => {
+                testQuestions = questions;
+                userAnswers = new Array(questions.length).fill(null);
+
+                const timePerQuestion = {
+                    physics: 90,
+                    chemistry: 60,
+                    biology: 20,
+                    mathematics: 90
+                };
+
+                timeLeft = questions.length * timePerQuestion[subject];
+                updateTimerDisplay();
+
+                document.getElementById('testSelection').style.display = 'none';
+                document.getElementById('testContainer').style.display = 'block';
+                testStarted = true;
+
+                timer = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        submitTest();
+                    }
+                }, 1000);
+
+                showQuestion(0);
+            });
+        }
+
+        // Load questions (placeholder)
+        async function loadQuestions(subject, chapter, count) {
+            const placeholderQuestions = [];
+            for (let i = 1; i <= count; i++) {
+                placeholderQuestions.push({
+                    id: i,
+                    question: `Sample question ${i} for ${subject} - ${chapter}`,
+                    options: [
+                        "Option A",
+                        "Option B",
+                        "Option C",
+                        "Option D"
+                    ],
+                    correctAnswer: Math.floor(Math.random() * 4)
+                });
+            }
+            return placeholderQuestions;
+        }
+
+        // Show question
+        function showQuestion(index) {
+            if (index < 0 || index >= testQuestions.length) return;
+
+            currentQuestionIndex = index;
+            const question = testQuestions[index];
+            const questionContainer = document.getElementById('questionContainer');
+
+            let optionsHtml = '';
+            question.options.forEach((option, i) => {
+                const isSelected = userAnswers[index] === i;
+                optionsHtml += `
+                    <div class="option ${isSelected ? 'selected' : ''}" onclick="selectAnswer(${i})">
+                        ${option}
+                    </div>
                 `;
-                container.appendChild(userItem);
             });
+
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <div class="question-text">Question ${index + 1}: ${question.question}</div>
+                    <div class="options">${optionsHtml}</div>
+                </div>
+            `;
+
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === testQuestions.length - 1;
         }
 
-        function deleteUser(index) {
-            if (users[index].username === 'admin') {
-                alert('Cannot delete admin user');
-                return;
-            }
+        // Select answer
+        function selectAnswer(answerIndex) {
+            userAnswers[currentQuestionIndex] = answerIndex;
+            showQuestion(currentQuestionIndex);
+        }
 
-            if (confirm(`Are you sure you want to delete user "${users[index].username}"?`)) {
-                users.splice(index, 1);
-                saveUsers();
-                updateUserList();
+        // Navigation functions
+        function nextQuestion() {
+            showQuestion(currentQuestionIndex + 1);
+        }
+
+        function prevQuestion() {
+            showQuestion(currentQuestionIndex - 1);
+        }
+
+        // Update timer
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent =
+                `Time Remaining: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Submit test
+        function submitTest() {
+            if (testStarted) {
+                clearInterval(timer);
+                testStarted = false;
+
+                let correct = 0;
+                testQuestions.forEach((question, index) => {
+                    if (userAnswers[index] === question.correctAnswer) {
+                        correct++;
+                    }
+                });
+
+                document.getElementById('testContainer').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+                document.getElementById('resultScore').textContent = `Score: ${correct}/${testQuestions.length}`;
+
+                let detailsHtml = '<h3>Question Details:</h3>';
+                testQuestions.forEach((question, index) => {
+                    const isCorrect = userAnswers[index] === question.correctAnswer;
+                    const userAnswer = userAnswers[index] !== null ?
+                        question.options[userAnswers[index]] : 'Not answered';
+                    const correctAnswer = question.options[question.correctAnswer];
+
+                    detailsHtml += `
+                        <div class="question-result" style="margin-bottom: 1rem; padding: 1rem; background: ${isCorrect ? '#d4edda' : '#f8d7da'}; border-radius: 5px;">
+                            <p><strong>Question ${index + 1}:</strong> ${question.question}</p>
+                            <p><strong>Your answer:</strong> ${userAnswer}</p>
+                            ${!isCorrect ? `<p><strong>Correct answer:</strong> ${correctAnswer}</p>` : ''}
+                        </div>
+                    `;
+                });
+
+                document.getElementById('resultDetails').innerHTML = detailsHtml;
             }
         }
 
+        // Reset test
+        function resetTest() {
+            document.getElementById('testSelection').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('subject').value = '';
+            document.getElementById('chapter').value = '';
+            document.getElementById('chapter').disabled = true;
+            document.getElementById('questionCount').value = '10';
+        }
+
+        // Logout
         function logout() {
             localStorage.removeItem('currentSession');
-            currentUser = null;
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('adminSection').style.display = 'none';
-            document.getElementById('loginFormElement').reset();
-            showMessage('Logged out successfully', 'success');
+            document.getElementById('testPortal').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
         }
-
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = text;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
-
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
-        }
-
-        // Auto-logout after 24 hours of inactivity
-        setInterval(() => {
-            const savedSession = localStorage.getItem('currentSession');
-            if (savedSession) {
-                const session = JSON.parse(savedSession);
-                if (Date.now() - session.loginTime > 24 * 60 * 60 * 1000) {
-                    logout();
-                    alert('Session expired. Please log in again.');
-                }
-            }
-        }, 60000); // Check every minute
     </script>
-    <script>
-    if (user) {
-    currentUser = user;
-    loginCount++;
-    localStorage.setItem('loginCount', loginCount.toString());
-
-    // Save session
-    const session = {
-        user: user,
-        loginTime: Date.now()
-    };
-    localStorage.setItem('currentSession', JSON.stringify(session));
-
-    showMessage('Login successful! Welcome back.', 'success');
-
-    setTimeout(() => {
-        showDashboard(); // <-- This is what we need to change
-    }, 1000);
-}
-    </script> {
-      case expression:
-
-        break;
-      default:
-
-    }
 </body>
 </html>
