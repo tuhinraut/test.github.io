@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Login</title>
+    <title>Login Page</title>
     <style>
         * {
             margin: 0;
@@ -21,20 +21,12 @@
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 2.5rem;
-            border-radius: 20px;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
-            transform: translateY(0);
-            transition: all 0.3s ease;
-        }
-
-        .login-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .login-header {
@@ -42,247 +34,270 @@
             margin-bottom: 2rem;
         }
 
-        .login-title {
+        .login-header h1 {
             color: #333;
-            font-size: 2rem;
-            font-weight: 600;
             margin-bottom: 0.5rem;
         }
 
-        .login-subtitle {
+        .login-header p {
             color: #666;
             font-size: 0.9rem;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
-            position: relative;
         }
 
-        .form-label {
+        label {
             display: block;
             margin-bottom: 0.5rem;
             color: #333;
             font-weight: 500;
-            font-size: 0.9rem;
         }
 
-        .form-input {
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
-            padding: 1rem;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
+            transition: border-color 0.3s ease;
         }
 
-        .form-input:focus {
+        input[type="text"]:focus,
+        input[type="password"]:focus {
             outline: none;
             border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .login-button {
+        .login-btn {
             width: 100%;
-            padding: 1rem;
+            padding: 0.75rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
             color: white;
+            border: none;
+            border-radius: 5px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            transform: translateY(0);
+            transition: transform 0.2s ease;
         }
 
-        .login-button:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .login-button:active {
-            transform: translateY(0);
-        }
-
-        .login-button:disabled {
-            opacity: 0.7;
+        .login-btn:disabled {
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
-        .error-message {
-            background: #fee;
-            color: #c33;
-            padding: 0.8rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 4px solid #f56565;
-            font-size: 0.9rem;
-            display: none;
+        .message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 500;
         }
 
-        .success-message {
-            background: #efe;
-            color: #2d5a2d;
-            padding: 0.8rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 4px solid #48bb78;
-            font-size: 0.9rem;
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .dashboard {
             display: none;
+            text-align: center;
+        }
+
+        .dashboard h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
         }
 
         .loading {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ffffff;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
             border-radius: 50%;
             border-top-color: transparent;
             animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e1e5e9;
-        }
-
-        .forgot-password {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .forgot-password:hover {
-            color: #764ba2;
-        }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="login-header">
-            <h1 class="login-title">Welcome Back</h1>
-            <p class="login-subtitle">Please sign in to your account</p>
+        <div id="loginForm">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p>Please sign in to your account</p>
+            </div>
+            
+            <form id="loginFormElement">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span id="loginBtnText">Sign In</span>
+                    <span id="loginBtnLoading" class="loading" style="display: none;"></span>
+                </button>
+            </form>
+            
+            <div id="message"></div>
         </div>
 
-        <div id="errorMessage" class="error-message"></div>
-        <div id="successMessage" class="success-message"></div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username" class="form-label">Username</label>
-                <input 
-                    type="text" 
-                    id="username" 
-                    class="form-input" 
-                    required 
-                    autocomplete="username"
-                    placeholder="Enter your username"
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    class="form-input" 
-                    required 
-                    autocomplete="current-password"
-                    placeholder="Enter your password"
-                >
-            </div>
-
-            <button type="submit" id="loginButton" class="login-button">
-                Sign In
-            </button>
-
-            <div class="form-footer">
-                <a href="#" class="forgot-password">Forgot your password?</a>
-            </div>
-        </form>
+        <div id="dashboard" class="dashboard">
+            <h2>Dashboard</h2>
+            <p id="welcomeMessage">Welcome to your dashboard!</p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:3001'; // Change this to your backend URL
+        const API_BASE = window.location.origin;
+        let authToken = localStorage.getItem('authToken');
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        // Check if user is already logged in
+        if (authToken) {
+            checkAuthStatus();
+        }
+
+        document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const loginButton = document.getElementById('loginButton');
-            const errorMessage = document.getElementById('errorMessage');
-            const successMessage = document.getElementById('successMessage');
-            
-            // Hide previous messages
-            errorMessage.style.display = 'none';
-            successMessage.style.display = 'none';
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginBtnLoading = document.getElementById('loginBtnLoading');
             
             // Show loading state
-            loginButton.disabled = true;
-            loginButton.innerHTML = '<span class="loading"></span>Signing in...';
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loginBtnLoading.style.display = 'inline-block';
             
             try {
-                const response = await fetch(`${API_BASE_URL}/api/login`, {
+                const response = await fetch(`${API_BASE}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username, password }),
+                    body: JSON.stringify({ username, password })
                 });
                 
                 const data = await response.json();
                 
-                if (response.ok) {
-                    // Success
-                    successMessage.textContent = data.message;
-                    successMessage.style.display = 'block';
+                if (data.success) {
+                    localStorage.setItem('authToken', data.token);
+                    authToken = data.token;
+                    showMessage('Login successful! Redirecting...', 'success');
                     
-                    // Store token if provided
-                    if (data.token) {
-                        localStorage.setItem('authToken', data.token);
-                    }
-                    
-                    // Redirect or perform next action
                     setTimeout(() => {
-                        window.location.href = '/dashboard'; // Change to your desired redirect
-                    }, 1500);
-                    
+                        showDashboard(data.user.username);
+                    }, 1000);
                 } else {
-                    // Error
-                    errorMessage.textContent = data.message || 'Login failed';
-                    errorMessage.style.display = 'block';
+                    showMessage(data.message || 'Login failed', 'error');
                 }
                 
             } catch (error) {
                 console.error('Login error:', error);
-                errorMessage.textContent = 'Network error. Please try again.';
-                errorMessage.style.display = 'block';
+                showMessage('Network error. Please try again.', 'error');
             } finally {
                 // Reset button state
-                loginButton.disabled = false;
-                loginButton.innerHTML = 'Sign In';
+                loginBtn.disabled = false;
+                loginBtnText.style.display = 'inline';
+                loginBtnLoading.style.display = 'none';
             }
         });
 
-        // Add enter key support
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/api/dashboard`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showDashboard(data.user.username);
+                } else {
+                    localStorage.removeItem('authToken');
+                    authToken = null;
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                localStorage.removeItem('authToken');
+                authToken = null;
             }
-        });
+        }
+
+        function showDashboard(username) {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${username}!`;
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            authToken = null;
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginFormElement').reset();
+            showMessage('Logged out successfully', 'success');
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
     </script>
 </body>
 </html>
