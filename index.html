@@ -129,6 +129,47 @@
             margin-bottom: 1.5rem;
         }
 
+        .dashboard-content {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .user-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
         .logout-btn {
             background: #dc3545;
             color: white;
@@ -137,6 +178,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: 500;
+            margin-top: 1rem;
         }
 
         .logout-btn:hover {
@@ -156,6 +198,47 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .add-user-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .add-user-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .admin-only {
+            display: none;
+        }
+
+        .user-list {
+            margin-top: 1rem;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: white;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -165,125 +248,252 @@
                 <h1>Welcome Back</h1>
                 <p>Please sign in to your account</p>
             </div>
-            
+
             <form id="loginFormElement">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                
+
                 <button type="submit" class="login-btn" id="loginBtn">
                     <span id="loginBtnText">Sign In</span>
                     <span id="loginBtnLoading" class="loading" style="display: none;"></span>
                 </button>
             </form>
-            
+
             <div id="message"></div>
         </div>
 
         <div id="dashboard" class="dashboard">
             <h2>Dashboard</h2>
-            <p id="welcomeMessage">Welcome to your dashboard!</p>
+
+            <div class="user-info">
+                <h3 id="welcomeMessage">Welcome back!</h3>
+                <p id="userRole">User Role: Standard</p>
+                <p id="loginTime">Last Login: Just now</p>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="loginCount">1</div>
+                    <div class="stat-label">Login Sessions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="uptime">Online</div>
+                    <div class="stat-label">Status</div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <h3>Quick Actions</h3>
+                <p>Welcome to your personalized dashboard. You have successfully logged in to the system.</p>
+            </div>
+
+            <div id="adminSection" class="add-user-section admin-only">
+                <h3>User Management (Admin Only)</h3>
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="newUsername">New Username</label>
+                        <input type="text" id="newUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <button type="submit" class="login-btn">Add User</button>
+                </form>
+
+                <div class="user-list">
+                    <h4>Current Users:</h4>
+                    <div id="userListContainer"></div>
+                </div>
+            </div>
+
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </div>
 
     <script>
-        const API_BASE = window.location.origin;
-        let authToken = localStorage.getItem('authToken');
+        // User credentials storage (In production, this would be on a secure server)
+        let users = [
+            { username: 'admin', password: 'admin2911', role: 'admin' },
+            { username: 'enu', password: 'enu0402', role: 'user' }
+            // Add more users here as needed
+        ];
 
-        // Check if user is already logged in
-        if (authToken) {
-            checkAuthStatus();
+        // Session management
+        let currentUser = null;
+        let loginCount = parseInt(localStorage.getItem('loginCount') || '0');
+
+        // Load users from localStorage if available
+        const savedUsers = localStorage.getItem('appUsers');
+        if (savedUsers) {
+            users = JSON.parse(savedUsers);
         }
 
+        // Check if user is already logged in
+        const savedSession = localStorage.getItem('currentSession');
+        if (savedSession) {
+            const session = JSON.parse(savedSession);
+            // Check if session is still valid (24 hours)
+            if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
+                currentUser = session.user;
+                showDashboard();
+            } else {
+                localStorage.removeItem('currentSession');
+            }
+        }
+
+        // Save users to localStorage
+        function saveUsers() {
+            localStorage.setItem('appUsers', JSON.stringify(users));
+        }
+
+        // Login form handler
         document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const username = document.getElementById('username').value;
+
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('loginBtn');
             const loginBtnText = document.getElementById('loginBtnText');
             const loginBtnLoading = document.getElementById('loginBtnLoading');
-            
+
             // Show loading state
             loginBtn.disabled = true;
             loginBtnText.style.display = 'none';
             loginBtnLoading.style.display = 'inline-block';
-            
-            try {
-                const response = await fetch(`${API_BASE}/api/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    localStorage.setItem('authToken', data.token);
-                    authToken = data.token;
-                    showMessage('Login successful! Redirecting...', 'success');
-                    
+
+            // Simulate network delay for better UX
+            setTimeout(() => {
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    currentUser = user;
+                    loginCount++;
+                    localStorage.setItem('loginCount', loginCount.toString());
+
+                    // Save session
+                    const session = {
+                        user: user,
+                        loginTime: Date.now()
+                    };
+                    localStorage.setItem('currentSession', JSON.stringify(session));
+
+                    showMessage('Login successful! Welcome back.', 'success');
+
                     setTimeout(() => {
-                        showDashboard(data.user.username);
+                        showDashboard();
                     }, 1000);
                 } else {
-                    showMessage(data.message || 'Login failed', 'error');
+                    showMessage('Invalid username or password. Please try again.', 'error');
                 }
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                showMessage('Network error. Please try again.', 'error');
-            } finally {
+
                 // Reset button state
                 loginBtn.disabled = false;
                 loginBtnText.style.display = 'inline';
                 loginBtnLoading.style.display = 'none';
-            }
+            }, 800);
         });
 
-        async function checkAuthStatus() {
-            try {
-                const response = await fetch(`${API_BASE}/api/dashboard`, {
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showDashboard(data.user.username);
-                } else {
-                    localStorage.removeItem('authToken');
-                    authToken = null;
-                }
-            } catch (error) {
-                console.error('Auth check error:', error);
-                localStorage.removeItem('authToken');
-                authToken = null;
+        // Add user form handler
+        document.getElementById('addUserForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const newUsername = document.getElementById('newUsername').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+
+            if (!newUsername || !newPassword) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Check if user already exists
+            if (users.find(u => u.username === newUsername)) {
+                alert('Username already exists');
+                return;
+            }
+
+            // Add new user
+            users.push({
+                username: newUsername,
+                password: newPassword,
+                role: 'user'
+            });
+
+            saveUsers();
+            updateUserList();
+
+            // Clear form
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+
+            alert(`User "${newUsername}" added successfully!`);
+        });
+
+        function showDashboard() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+
+            // Update user info
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.username}!`;
+            document.getElementById('userRole').textContent = `User Role: ${currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)}`;
+            document.getElementById('loginTime').textContent = `Last Login: ${new Date().toLocaleString()}`;
+
+            // Update stats
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('loginCount').textContent = loginCount;
+
+            // Show admin section if user is admin
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminSection').style.display = 'block';
+                updateUserList();
             }
         }
 
-        function showDashboard(username) {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('welcomeMessage').textContent = `Welcome back, ${username}!`;
+        function updateUserList() {
+            const container = document.getElementById('userListContainer');
+            container.innerHTML = '';
+
+            users.forEach((user, index) => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <span><strong>${user.username}</strong> (${user.role})</span>
+                    ${user.username !== 'admin' ? `<button class="delete-btn" onclick="deleteUser(${index})">Delete</button>` : ''}
+                `;
+                container.appendChild(userItem);
+            });
+        }
+
+        function deleteUser(index) {
+            if (users[index].username === 'admin') {
+                alert('Cannot delete admin user');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete user "${users[index].username}"?`)) {
+                users.splice(index, 1);
+                saveUsers();
+                updateUserList();
+            }
         }
 
         function logout() {
-            localStorage.removeItem('authToken');
-            authToken = null;
+            localStorage.removeItem('currentSession');
+            currentUser = null;
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'none';
             document.getElementById('loginFormElement').reset();
             showMessage('Logged out successfully', 'success');
         }
@@ -293,11 +503,49 @@
             messageDiv.textContent = text;
             messageDiv.className = `message ${type}`;
             messageDiv.style.display = 'block';
-            
+
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
         }
+
+        // Auto-logout after 24 hours of inactivity
+        setInterval(() => {
+            const savedSession = localStorage.getItem('currentSession');
+            if (savedSession) {
+                const session = JSON.parse(savedSession);
+                if (Date.now() - session.loginTime > 24 * 60 * 60 * 1000) {
+                    logout();
+                    alert('Session expired. Please log in again.');
+                }
+            }
+        }, 60000); // Check every minute
     </script>
+    <script>
+    if (user) {
+    currentUser = user;
+    loginCount++;
+    localStorage.setItem('loginCount', loginCount.toString());
+
+    // Save session
+    const session = {
+        user: user,
+        loginTime: Date.now()
+    };
+    localStorage.setItem('currentSession', JSON.stringify(session));
+
+    showMessage('Login successful! Welcome back.', 'success');
+
+    setTimeout(() => {
+        showDashboard(); // <-- This is what we need to change
+    }, 1000);
+}
+    </script> {
+      case expression:
+
+        break;
+      default:
+
+    }
 </body>
 </html>

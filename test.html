@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .stats {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stats h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .demo-credentials {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .demo-credentials h4 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-credentials p {
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Test Portal Styles */
+        .test-portal {
+            display: none;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header h1 {
+            color: #333;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .test-selection {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .test-container {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .timer {
+            background: #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .question {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .option {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background: #f0f0f0;
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: #218838;
+        }
+
+        .next-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #0069d9;
+        }
+
+        .prev-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .prev-btn:hover {
+            background: #5a6268;
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .result-score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .result-details {
+            margin-top: 2rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-header">
+            <h1>Student Test Portal</h1>
+            <p>Please login to access your tests</p>
+        </div>
+
+        <div id="messageContainer"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">Login</button>
+        </form>
+
+        <div class="demo-credentials">
+            <h4>Demo Credentials:</h4>
+            <p><strong>Username:</strong> enu | <strong>Password:</strong> enu0402</p>
+            <p><strong>Username:</strong> admin | <strong>Password:</strong> admin123</p>
+        </div>
+
+        <div class="stats">
+            <h3>Portal Statistics</h3>
+            <p>Total Users: <span id="totalUsers">0</span></p>
+            <p>Login Attempts: <span id="loginAttempts">0</span></p>
+            <p>Successful Logins: <span id="successfulLogins">0</span></p>
+        </div>
+    </div>
+
+    <!-- Test Portal -->
+    <div id="testPortal" class="test-portal">
+        <div class="container">
+            <div class="header">
+                <h1>Test Taking Portal</h1>
+                <div class="user-info">
+                    <span id="usernameDisplay">Welcome, User</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="test-selection" id="testSelection">
+                <h2>Select Your Test</h2>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" onchange="updateChapters()">
+                        <option value="">-- Select Subject --</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="biology">Biology</option>
+                        <option value="mathematics">Mathematics</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="chapter">Chapter</label>
+                    <select id="chapter" disabled>
+                        <option value="">-- Select Subject First --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="questionCount">Number of Questions</label>
+                    <input type="number" id="questionCount" min="1" max="50" value="10">
+                </div>
+
+                <button class="start-btn" onclick="startTest()">Start Test</button>
+            </div>
+
+            <div id="testContainer" class="test-container">
+                <div class="timer" id="timer">Time Remaining: 00:00</div>
+
+                <div id="questionContainer">
+                    <!-- Questions will be loaded here -->
+                </div>
+
+                <div class="navigation">
+                    <button class="nav-btn prev-btn" id="prevBtn" onclick="prevQuestion()">Previous</button>
+                    <button class="nav-btn next-btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+                    <button class="nav-btn submit-btn" id="submitBtn" onclick="submitTest()">Submit Test</button>
+                </div>
+            </div>
+
+            <div id="resultContainer" class="result-container">
+                <h2>Test Results</h2>
+                <div class="result-score" id="resultScore">Score: 0/0</div>
+                <p id="resultMessage">Your test has been submitted successfully!</p>
+
+                <div class="result-details" id="resultDetails">
+                    <!-- Result details will be shown here -->
+                </div>
+
+                <button class="start-btn" onclick="resetTest()">Take Another Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize statistics from localStorage
+        let stats = JSON.parse(localStorage.getItem('portalStats')) || {
+            totalUsers: 3,
+            loginAttempts: 0,
+            successfulLogins: 0
+        };
+
+        // Valid user credentials
+        const validUsers = {
+            'enu': { password: 'enu0402', role: 'student', name: 'Student One' },
+            'admin': { password: 'admin123', role: 'admin', name: 'Administrator' }
+        };
+
+        // Update statistics display
+        function updateStats() {
+            document.getElementById('totalUsers').textContent = stats.totalUsers;
+            document.getElementById('loginAttempts').textContent = stats.loginAttempts;
+            document.getElementById('successfulLogins').textContent = stats.successfulLogins;
+            localStorage.setItem('portalStats', JSON.stringify(stats));
+        }
+
+        // Show message
+        function showMessage(message, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                messageContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Update login attempts
+            stats.loginAttempts++;
+            updateStats();
+
+            // Disable login button temporarily
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+
+            // Simulate login delay
+            setTimeout(() => {
+                if (validUsers[username] && validUsers[username].password === password) {
+                    // Successful login
+                    stats.successfulLogins++;
+                    updateStats();
+
+                    // Create user session
+                    const userSession = {
+                        user: {
+                            username: username,
+                            name: validUsers[username].name,
+                            role: validUsers[username].role
+                        },
+                        loginTime: new Date().toISOString()
+                    };
+
+                    // Store session
+                    localStorage.setItem('currentSession', JSON.stringify(userSession));
+
+                    showMessage('Login successful! Redirecting to test portal...', 'success');
+
+                    // Transition to test portal
+                    setTimeout(() => {
+                        document.getElementById('loginPage').style.display = 'none';
+                        document.getElementById('testPortal').style.display = 'block';
+                        document.getElementById('usernameDisplay').textContent = `Welcome, ${userSession.user.name}`;
+                    }, 1000);
+
+                } else {
+                    // Failed login
+                    showMessage('Invalid username or password. Please try again.', 'error');
+                }
+
+                // Re-enable login button
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }, 1000);
+        });
+
+        // Check if user is already logged in
+        function checkExistingSession() {
+            const currentSession = JSON.parse(localStorage.getItem('currentSession'));
+            if (currentSession && currentSession.user) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('testPortal').style.display = 'block';
+                document.getElementById('usernameDisplay').textContent = `Welcome, ${currentSession.user.name}`;
+            }
+        }
+
+        // Initialize stats display
+        updateStats();
+
+        // Check for existing session on page load
+        checkExistingSession();
+
+        // Test functionality variables
+        let testQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timer;
+        let timeLeft;
+        let testStarted = false;
+
+        // Chapter data
+        const chapters = {
+            physics: ["Mechanics", "Electromagnetism", "Thermodynamics", "Optics", "Modern Physics"],
+            chemistry: ["Atomic Structure", "Chemical Bonding", "Thermodynamics", "Organic Chemistry", "Electrochemistry"],
+            biology: ["Cell Biology", "Genetics", "Ecology", "Human Physiology", "Plant Physiology"],
+            mathematics: ["Algebra", "Calculus", "Geometry", "Trigonometry", "Statistics"]
+        };
+
+        // Update chapters dropdown
+        function updateChapters() {
+            const subject = document.getElementById('subject').value;
+            const chapterSelect = document.getElementById('chapter');
+
+            if (subject) {
+                chapterSelect.innerHTML = '<option value="">-- Select Chapter --</option>';
+                chapters[subject].forEach(chapter => {
+                    chapterSelect.innerHTML += `<option value="${chapter.toLowerCase().replace(' ', '-')}">${chapter}</option>`;
+                });
+                chapterSelect.disabled = false;
+            } else {
+                chapterSelect.innerHTML = '<option value="">-- Select Subject First --</option>';
+                chapterSelect.disabled = true;
+            }
+        }
+
+        // Start test
+        function startTest() {
+            const subject = document.getElementById('subject').value;
+            const chapter = document.getElementById('chapter').value;
+            const questionCount = parseInt(document.getElementById('questionCount').value);
+
+            if (!subject || !chapter || !questionCount) {
+                alert('Please select subject, chapter and number of questions');
+                return;
+            }
+
+            loadQuestions(subject, chapter, questionCount).then(questions => {
+                testQuestions = questions;
+                userAnswers = new Array(questions.length).fill(null);
+
+                const timePerQuestion = {
+                    physics: 90,
+                    chemistry: 60,
+                    biology: 20,
+                    mathematics: 90
+                };
+
+                timeLeft = questions.length * timePerQuestion[subject];
+                updateTimerDisplay();
+
+                document.getElementById('testSelection').style.display = 'none';
+                document.getElementById('testContainer').style.display = 'block';
+                testStarted = true;
+
+                timer = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        submitTest();
+                    }
+                }, 1000);
+
+                showQuestion(0);
+            });
+        }
+
+        // Load questions (placeholder)
+        async function loadQuestions(subject, chapter, count) {
+            const placeholderQuestions = [];
+            for (let i = 1; i <= count; i++) {
+                placeholderQuestions.push({
+                    id: i,
+                    question: `Sample question ${i} for ${subject} - ${chapter}`,
+                    options: [
+                        "Option A",
+                        "Option B",
+                        "Option C",
+                        "Option D"
+                    ],
+                    correctAnswer: Math.floor(Math.random() * 4)
+                });
+            }
+            return placeholderQuestions;
+        }
+
+        // Show question
+        function showQuestion(index) {
+            if (index < 0 || index >= testQuestions.length) return;
+
+            currentQuestionIndex = index;
+            const question = testQuestions[index];
+            const questionContainer = document.getElementById('questionContainer');
+
+            let optionsHtml = '';
+            question.options.forEach((option, i) => {
+                const isSelected = userAnswers[index] === i;
+                optionsHtml += `
+                    <div class="option ${isSelected ? 'selected' : ''}" onclick="selectAnswer(${i})">
+                        ${option}
+                    </div>
+                `;
+            });
+
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <div class="question-text">Question ${index + 1}: ${question.question}</div>
+                    <div class="options">${optionsHtml}</div>
+                </div>
+            `;
+
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === testQuestions.length - 1;
+        }
+
+        // Select answer
+        function selectAnswer(answerIndex) {
+            userAnswers[currentQuestionIndex] = answerIndex;
+            showQuestion(currentQuestionIndex);
+        }
+
+        // Navigation functions
+        function nextQuestion() {
+            showQuestion(currentQuestionIndex + 1);
+        }
+
+        function prevQuestion() {
+            showQuestion(currentQuestionIndex - 1);
+        }
+
+        // Update timer
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent =
+                `Time Remaining: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Submit test
+        function submitTest() {
+            if (testStarted) {
+                clearInterval(timer);
+                testStarted = false;
+
+                let correct = 0;
+                testQuestions.forEach((question, index) => {
+                    if (userAnswers[index] === question.correctAnswer) {
+                        correct++;
+                    }
+                });
+
+                document.getElementById('testContainer').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+                document.getElementById('resultScore').textContent = `Score: ${correct}/${testQuestions.length}`;
+
+                let detailsHtml = '<h3>Question Details:</h3>';
+                testQuestions.forEach((question, index) => {
+                    const isCorrect = userAnswers[index] === question.correctAnswer;
+                    const userAnswer = userAnswers[index] !== null ?
+                        question.options[userAnswers[index]] : 'Not answered';
+                    const correctAnswer = question.options[question.correctAnswer];
+
+                    detailsHtml += `
+                        <div class="question-result" style="margin-bottom: 1rem; padding: 1rem; background: ${isCorrect ? '#d4edda' : '#f8d7da'}; border-radius: 5px;">
+                            <p><strong>Question ${index + 1}:</strong> ${question.question}</p>
+                            <p><strong>Your answer:</strong> ${userAnswer}</p>
+                            ${!isCorrect ? `<p><strong>Correct answer:</strong> ${correctAnswer}</p>` : ''}
+                        </div>
+                    `;
+                });
+
+                document.getElementById('resultDetails').innerHTML = detailsHtml;
+            }
+        }
+
+        // Reset test
+        function resetTest() {
+            document.getElementById('testSelection').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('subject').value = '';
+            document.getElementById('chapter').value = '';
+            document.getElementById('chapter').disabled = true;
+            document.getElementById('questionCount').value = '10';
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('currentSession');
+            document.getElementById('testPortal').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+    </script>
+</body>
+</html>
